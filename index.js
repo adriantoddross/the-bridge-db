@@ -1,4 +1,6 @@
-const { ApolloServer, gql } = require("apollo-server");
+require("dotenv").config();
+const express = require("express");
+const { ApolloServer, gql } = require("apollo-server-express");
 
 // A schema is a collection of type definitions (hence "typeDefs")
 // that together define the "shape" of queries that are executed against
@@ -39,6 +41,11 @@ const resolvers = {
   },
 };
 
+const app = express();
+const port = process.env.PORT || 4000;
+
+app.post("/hello", (req, res) => res.send("hello friend"));
+
 // The ApolloServer constructor requires two parameters: your schema
 // definition and your set of resolvers.
 const server = new ApolloServer({
@@ -50,7 +57,6 @@ const server = new ApolloServer({
   },
 });
 
-// The `listen` method launches a web server.
-server.listen({ port: process.env.PORT || 4000 }).then(({ url }) => {
-  console.log(`🚀 Server ready at ${url}`);
-});
+server.applyMiddleware({ app });
+
+app.listen(port, () => console.log(`Listening on port: ${port}`));
