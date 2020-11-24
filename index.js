@@ -1,6 +1,10 @@
 require("dotenv").config();
 const express = require("express");
 const { ApolloServer, gql } = require("apollo-server-express");
+const app = express();
+const mailchimp = require("@mailchimp/mailchimp_marketing");
+
+const port = process.env.PORT || 4000;
 
 // A schema is a collection of type definitions (hence "typeDefs")
 // that together define the "shape" of queries that are executed against
@@ -41,9 +45,6 @@ const resolvers = {
   },
 };
 
-const app = express();
-const port = process.env.PORT || 4000;
-
 app.post("/hello", (req, res) => res.send("hello friend"));
 
 // The ApolloServer constructor requires two parameters: your schema
@@ -60,3 +61,15 @@ const server = new ApolloServer({
 server.applyMiddleware({ app });
 
 app.listen(port, () => console.log(`Listening on port: ${port}`));
+
+mailchimp.setConfig({
+  apiKey: `${process.env.MAILCHIMP_API_KEY}`,
+  server: `${process.env.MAILCHIMP_SERVER_PREFIX}`,
+});
+
+async function run() {
+  const response = await mailchimp.ping.get();
+  console.log(response);
+}
+
+run();
