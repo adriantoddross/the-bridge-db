@@ -1,7 +1,7 @@
 require("dotenv").config();
 const express = require("express");
 const { ApolloServer, gql } = require("apollo-server-express");
-const { initMailchimp } = require("./utils/mailchimp");
+const mailchimpAPI = require("./utils/mailchimp");
 
 const app = express();
 const port = process.env.PORT || 4000;
@@ -45,7 +45,9 @@ const resolvers = {
   },
 };
 
-app.post("/subscribe", (req, res) => {});
+app.post("/subscribe", (req, res) => {
+  res.send("Hello!");
+});
 
 // The ApolloServer constructor requires two parameters: your schema
 // definition and your set of resolvers.
@@ -61,4 +63,4 @@ const server = new ApolloServer({
 server.applyMiddleware({ app });
 
 app.listen(port, () => console.log(`Listening on port: ${port}`));
-initMailchimp();
+mailchimpAPI.init();
