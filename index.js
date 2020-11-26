@@ -1,6 +1,7 @@
 require("dotenv").config();
 const express = require("express");
 const { ApolloServer, gql } = require("apollo-server-express");
+const mailchimp = require("./utils/mailchimp");
 const mailchimpAPI = require("./utils/mailchimp");
 
 const app = express();
@@ -45,8 +46,26 @@ const resolvers = {
   },
 };
 
+app.use(
+  express.urlencoded({
+    extended: true,
+  })
+);
+
 app.post("/subscribe", (req, res) => {
-  res.send("Hello!");
+  res.status(200).send(req.body);
+
+  const validEmailRegex = RegExp(
+    /^(([^<>()[\].,;:\s@"]+(\.[^<>()[\].,;:\s@"]+)*)|(".+"))@(([^<>()[\].,;:\s@"]+\.)+[^<>()[\].,;:\s@"]{2,})$/i
+  );
+
+  if (req.body.email && req.body.email.match(validEmailRegex)) {
+    mailchimp.subscribeUser(req.body.email);
+  } else {
+    res
+      .status(400)
+      .json({ error: "E-mail address wasn't provided or is invalid." });
+  }
 });
 
 // The ApolloServer constructor requires two parameters: your schema
@@ -63,4 +82,4 @@ const server = new ApolloServer({
 server.applyMiddleware({ app });
 
 app.listen(port, () => console.log(`Listening on port: ${port}`));
-mailchimpAPI.init();
+mailchimp.init();
