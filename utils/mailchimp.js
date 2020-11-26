@@ -7,7 +7,7 @@ mailchimp.setConfig({
 });
 
 const mailchimpAPI = {
-  init: async () => {
+  ping: async () => {
     const response = await mailchimp.ping.get();
     console.log(response);
   },
