@@ -20,7 +20,7 @@ const mailchimpAPI = {
     );
 
     const { status, email_address } = response;
-    console.log(`Email: ${email_address}, Status: ${status}`);
+    return { email_address, status };
   },
 };
 
