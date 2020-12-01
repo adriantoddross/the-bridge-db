@@ -18,9 +18,9 @@ const mailchimpAPI = {
       subscriberHash,
       { email_address: email, status_if_new: "subscribed" }
     );
+    const { status, email_address, timestamp_opt } = response;
 
-    const { status, email_address } = response;
-    return { email_address, status };
+    return { email_address, status, timestamp_opt };
   },
 };
 
