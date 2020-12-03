@@ -1,7 +1,4 @@
-const whitelist = [
-  "http://localhost:3000",
-  "https://the-bridge-db.herokuapp.com/",
-];
+const whitelist = ["http://localhost:3000", "https://impactnigeria.org/"];
 
 module.exports = {
   corsOptions: {
