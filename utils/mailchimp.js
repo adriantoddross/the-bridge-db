@@ -16,7 +16,11 @@ const mailchimpAPI = {
     const response = await mailchimp.lists.setListMember(
       `${process.env.MAILCHIMP_LIST_ID}`,
       subscriberHash,
-      { email_address: email, status_if_new: "subscribed" }
+      {
+        email_address: email,
+        status_if_new: "subscribed",
+        status: "subscribed",
+      }
     );
     const { status, email_address, timestamp_opt } = response;
 
